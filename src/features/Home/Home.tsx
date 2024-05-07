@@ -1,10 +1,23 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import gif from '../../assets/dating-story.gif'
+
 
 const Home: React.FC = () => {
     return (
-        <div>
-            <h1>Welcome to Pacil Dating Apps</h1>
-            <p>Your journey to finding love begins here.</p>
+        <div className="w-screen flex flex-wrap flex-row px-32 py-32">
+            <div className="lg:w-2/3 bg-white text-black text-left py-32">
+                <h1 className="text-4xl font-bold mb-2">Pacil Dating App</h1>
+                <p className="text-xl mb-4">Connect with people around you and find your perfect match.</p>
+                <div>
+                    <Link to="/login">
+                        <button className="bg-neutral-100 text-blue-500 font-bold py-2 px-4 rounded hover:bg-gray-100 mr-2">Login</button>
+                    </Link>
+                </div>
+            </div>
+            <div className="lg:w-1/3 pr-12" style={{ maxWidth: "100%", height: "auto" }}>
+                <img className="" src={gif} alt="hero" />
+            </div>
         </div>
     );
 };
