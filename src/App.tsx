@@ -5,12 +5,13 @@ import Profile from './features/Profile/Profile';
 import Matches from './features/Matches/Matches';
 
 import './index.css'
+import Login from './features/Authentication/Login';
 
 const App: React.FC = () => {
     return (
-      <div className="bg-white text-black p-4">
+      <div className="bg-white text-black">
         <Router>
-            <nav>
+            {/* <nav>
                 <Link to="/">
                   <span className="m-2 text-l mb-2">Home</span>
                 </Link>
@@ -20,9 +21,10 @@ const App: React.FC = () => {
                 <Link to="/matches">
                   <span className="m-2 text-l mb-2">Matches</span>
                 </Link>
-            </nav>
+            </nav> */}
             <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/login"element={<Login />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/matches" element={<Matches />} />
             </Routes>
