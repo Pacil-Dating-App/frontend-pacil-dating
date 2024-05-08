@@ -30,12 +30,13 @@ export default function Login() {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const { username, password } = formData.user;
         
         if (userData && username === userData.username && password === userData.password) {
             login();
+            await new Promise(r => setTimeout(r, 2000));
             navigate('/');
             setAuthError(false);
         } else {

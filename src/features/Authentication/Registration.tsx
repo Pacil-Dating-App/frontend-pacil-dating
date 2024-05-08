@@ -36,13 +36,14 @@ export default function Registration() {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const userData = {
             username: formData.user.username,
             password: formData.user.password,
           };
         addUser(userData);
+        await new Promise(r => setTimeout(r, 2000));
         navigate('/login')
     };
 
