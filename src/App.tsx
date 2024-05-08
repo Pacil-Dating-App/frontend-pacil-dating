@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css'
-import { BrowserRouter as Router, Routes, Route, Link, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Routes, Route, BrowserRouter } from 'react-router-dom';
 import Home from './features/Home/Home';
 import Profile from './features/Profile/Profile';
 import Matches from './features/Matches/Matches';
@@ -11,7 +11,7 @@ const App: React.FC = () => {
     return (
       <AuthProvider>
         <BrowserRouter>
-        <div className="bg-white text-black">
+        <div className="bg-white text-black px-20">
           {/* <nav>
               <Link to="/">
                 <span className="m-2 text-l mb-2">Home</span>

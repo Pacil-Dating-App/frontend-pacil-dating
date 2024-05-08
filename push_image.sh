@@ -1,29 +1,29 @@
 #!/bin/bash
 
 # Variables
-ORGANIZATION="pacil-dating-app"
+USERNAME="mikasuryof"
 REPOSITORY="frontend-pacil-dating"
-IMAGE_NAME="ghcr.io/${ORGANIZATION}/${REPOSITORY}:latest"
+IMAGE_NAME="${USERNAME}/${REPOSITORY}:latest"
 
-# Prompt for GitHub credentials
-read -p "Enter your GitHub username: " GITHUB_USERNAME
-read -sp "Enter your GitHub token: " GITHUB_TOKEN
-echo # new line for clean output after hidden input
+# Check for Docker Hub username and password
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Usage: $0 <DOCKER_USERNAME> <DOCKER_PASSWORD>"
+    exit 1
+fi
 
-# Authenticate with GitHub Container Registry
-echo "Logging into GitHub Container Registry..."
-echo $GITHUB_TOKEN | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin
+DOCKER_USERNAME=$1
+DOCKER_PASSWORD=$2
+
+# Login to Docker Hub
+echo "Logging into Docker Hub..."
+echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
 # Build the Docker image
 echo "Building Docker image..."
-docker build -t $IMAGE_NAME .
+docker buildx build --platform linux/amd64 -t $IMAGE_NAME .
 
-# # Tag the Docker image
-# echo "Tagging Docker image..."
-# docker tag $IMAGE_NAME ghcr.io/$IMAGE_NAME
-
-# Push the Docker image to GitHub Container Registry
-echo "Pushing Docker image to GitHub Container Registry..."
+# Push the Docker image to Docker Hub
+echo "Pushing Docker image to Docker Hub..."
 docker push $IMAGE_NAME
 
 echo "Docker image pushed successfully."

@@ -36,8 +36,8 @@ const Home: React.FC = () => {
                 <img className="" src={gif} alt="hero" />
             </div>
             <div className="lg:w-2/3 bg-white text-black text-left pl-20">
-                <h1 className="text-4xl font-bold mb-2">Pacil Dating App</h1>
-                <p className="text-xl mb-4">Connect with people around you and find your perfect match.</p>
+                <h1 className="text-4xl font-bold mb-2">Find Your Pacil Match</h1>
+                <p className="text-xl mb-4">Connect with people around you and find your perfect pacilians match.</p>
                 <div>
                     {isAuthenticated ? <AuthenticatedContent /> : <GuestContent />}
                 </div>
