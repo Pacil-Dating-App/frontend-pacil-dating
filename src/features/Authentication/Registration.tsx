@@ -9,9 +9,9 @@ interface FormData {
   };
 }
 
-export default function Login() {
+export default function Registration() {
     const navigate = useNavigate();
-    const { login, userData } = useAuth();
+    const { addUser } = useAuth();
     const [formData, setFormData] = useState<FormData>({
         user: {
         username: "",
@@ -20,6 +20,12 @@ export default function Login() {
     });
 
     const [authError, setAuthError] = useState(false);
+
+    // Dummy credentials for authentication
+    const DUMMY_USER = {
+        username: "testuser",
+        password: "password123",
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -32,22 +38,13 @@ export default function Login() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const { username, password } = formData.user;
-        
-        if (userData && username === userData.username && password === userData.password) {
-            login();
-            navigate('/');
-            setAuthError(false);
-        } else {
-            setAuthError(true);
-        }
-          
+        const userData = {
+            username: formData.user.username,
+            password: formData.user.password,
+          };
+        addUser(userData);
+        navigate('/login')
     };
-    const handleToRegister = () => {
-        navigate('/signup');
-    };
-
-    
 
     return (
         <figure className="h-screen flex bg-white">
@@ -59,7 +56,7 @@ export default function Login() {
             <div className="text-primary m-6">
             <div className="flex items-center mt-3 justify-center">
                 <h1 className="text-2xl font-medium text-primary mt-4 mb-2">
-                Login to your account
+                Register your account
                 </h1>
             </div>
             <form onSubmit={handleSubmit}>
@@ -87,15 +84,10 @@ export default function Login() {
                     type="submit"
                     className="bg-blue-700 hover:bg-blue-500 py-2 px-4 text-md text-white rounded border border-blue focus:outline-none focus:border-black"
                 >
-                    Login
+                    Sign Up
                 </button>
                 </div>
             </form>
-            <div className="flex items-center mt-3 justify-center">
-                <button onClick={handleToRegister} className="justify-center text-blue-500 hover:underline">
-                Need to register? Sign up for free
-                </button>
-            </div>
             </div>
         </div>
         </figure>

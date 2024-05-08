@@ -20,7 +20,7 @@ echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 
 # Build the Docker image
 echo "Building Docker image..."
-docker buildx build --platform linux/amd64 -t $IMAGE_NAME .
+docker buildx build --platform linux/amd64 -t $IMAGE_NAME --push .
 
 # Push the Docker image to Docker Hub
 echo "Pushing Docker image to Docker Hub..."

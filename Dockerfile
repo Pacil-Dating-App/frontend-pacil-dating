@@ -1,19 +1,26 @@
-FROM node:16.13.1-alpine
+# Use an official Node.js runtime as a parent image
+FROM --platform=linux/amd64 node:16-alpine
 
-WORKDIR /usr/src/app
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the package.json and package-lock.json
 COPY package*.json ./
-COPY tsconfig.json ./
+
+# Install dependencies
 RUN npm install
-COPY ./src ./src
+
+# Copy the rest of your application's code
+COPY . .
+
+# Build the app for production
 RUN npm run build
-COPY ./client ./client
-RUN cd client && npm install && npm run build
 
-FROM node:16.13.1-alpine
+# Install serve to serve the production build
+RUN npm install -g serve
 
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install --only=production
-COPY --from=0 /usr/src/app/build ./build
-EXPOSE 80
-CMD npm start
+# Command to run the app
+CMD ["serve", "-s", "build", "-l", "3000"]
+
+# Expose the port the app runs on
+EXPOSE 3000
