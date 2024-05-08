@@ -1,6 +1,6 @@
 import React from 'react';
 import './index.css'
-import { BrowserRouter as Routes, Route, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, BrowserRouter } from 'react-router-dom';
 import Home from './features/Home/Home';
 import Profile from './features/Profile/Profile';
 import Matches from './features/Matches/Matches';
