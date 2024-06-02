@@ -1,40 +1,58 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface AuthContextType {
-    isAuthenticated: boolean;
-    login: () => void;
-    logout: () => void;
-    addUser: (userData: UserData) => void;
-    userData: UserData | null;
-  }
-  
-  interface UserData {
-    username: string;
-    password: string;
-    // Add other user data fields as needed
-  }
-  
-  // Your existing code remains the same, just adding the new method signature
-  const AuthContext = createContext<AuthContextType | undefined>(undefined);
-  
-  export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userData, setUserData] = useState<UserData | null>(null);
-  
-    const login = () => setIsAuthenticated(true);
-    const logout = () => {
-      setIsAuthenticated(false);
-      setUserData(null); // Clear user data on logout
-    };
-    const addUser = (userData: UserData) => setUserData(userData);
-  
-    return (
-      <AuthContext.Provider value={{ isAuthenticated, login, logout, addUser, userData }}>
-        {children}
-      </AuthContext.Provider>
-    );
+  isAuthenticated: boolean;
+  login: (userData: UserData, token: string) => void;
+  logout: () => void;
+  addUser: (userData: UserData) => void;
+  userData: UserData | null;
+}
+
+interface UserData {
+  username: string;
+  password: string;
+  // Add other user data fields as needed
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userData, setUserData] = useState<UserData | null>(null);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+      setIsAuthenticated(true);
+      const storedUserData = sessionStorage.getItem('userData');
+      if (storedUserData) {
+        setUserData(JSON.parse(storedUserData));
+      }
+    }
+  }, []);
+
+  const login = (userData: UserData, token: string) => {
+    setIsAuthenticated(true);
+    setUserData(userData);
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('userData', JSON.stringify(userData));
   };
-  
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    setUserData(null);
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('userData');
+  };
+
+  const addUser = (userData: UserData) => setUserData(userData);
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, addUser, userData }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
