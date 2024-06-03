@@ -29,6 +29,11 @@ const MatchmakingPage: React.FC = () => {
     navigate('/chatroom', { state: { user: acceptedUser } });
   };
 
+  const handleViewDetail = () => {
+    const userDetail = users[currentIndex];
+    navigate('/mahasiswa-detail', { state: { user: userDetail } });
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -56,6 +61,9 @@ const MatchmakingPage: React.FC = () => {
         </button>
         <button onClick={handleNextProfile} className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400">
           Next
+        </button>
+        <button onClick={handleViewDetail} className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-400">
+          View Detail
         </button>
       </div>
     </div>

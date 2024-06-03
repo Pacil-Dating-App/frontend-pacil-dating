@@ -7,6 +7,8 @@ import Matches from './features/Matches/Matches';
 import Login from './features/Authentication/Login';
 import { AuthProvider } from './features/Authentication/AuthContext';
 import Registration from './features/Authentication/Registration';
+import ChatRoom from './features/Chat/ChatRoom';
+import MahasiswaDetailPage from './features/Matches/MatchDetailProfile';
 
 const App: React.FC = () => {
     return (
@@ -30,6 +32,8 @@ const App: React.FC = () => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/matches" element={<Matches />} />
               <Route path="/signup" element={<Registration />} />
+              <Route path="/chatroom" element={<ChatRoom />} />
+              <Route path="/mahasiswa-detail" element={<MahasiswaDetailPage />} />
           </Routes>
         </div>
         </BrowserRouter>
