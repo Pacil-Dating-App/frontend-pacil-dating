@@ -1,26 +1,36 @@
-# Use an official Node.js runtime as a parent image
-FROM --platform=linux/amd64 node:16-alpine
-
-# Set the working directory in the container
+# Base image
+FROM node:20-alpine as base
+RUN apk add --no-cache g++ make py3-pip libc6-compat
 WORKDIR /app
-
-# Copy the package.json and package-lock.json
 COPY package*.json ./
-
-# Install dependencies
+RUN ls -l /app  # Debug step to check if package.json is copied
 RUN npm install
+EXPOSE 3000
 
-# Copy the rest of your application's code
+# Development stage
+FROM base as dev
+ENV NODE_ENV=development
 COPY . .
+RUN ls -l /app  # Debug step to check if all files are copied
+CMD ["npm", "run", "dev"]
 
-# Build the app for production
+# Builder stage
+FROM base as builder
+WORKDIR /app
+COPY . .
+RUN ls -l /app  # Debug step to check if all files are copied
 RUN npm run build
 
-# Install serve to serve the production build
-RUN npm install -g serve
-
-# Command to run the app
-CMD ["serve", "-s", "build", "-l", "3000"]
-
-# Expose the port the app runs on
-EXPOSE 3000
+# Production stage
+FROM base as production
+ENV NODE_ENV=production
+RUN npm ci
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+USER nextjs
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/public ./public
+RUN ls -l /app  # Debug step to check if all files are copied
+CMD ["npm", "start"]

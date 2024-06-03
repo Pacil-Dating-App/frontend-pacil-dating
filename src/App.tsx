@@ -15,17 +15,6 @@ const App: React.FC = () => {
       <AuthProvider>
         <BrowserRouter>
         <div className="bg-white text-black px-20">
-          {/* <nav>
-              <Link to="/">
-                <span className="m-2 text-l mb-2">Home</span>
-              </Link>
-              <Link to="/profile">
-                <span className="m-2 text-l mb-2">Profile</span>
-              </Link>
-              <Link to="/matches">
-                <span className="m-2 text-l mb-2">Matches</span>
-              </Link>
-          </nav> */}
           <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login"element={<Login />} />
