@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import Cookies from "js-cookie";
 
 interface FormData {
   user: {
@@ -35,11 +36,8 @@ export default function Login() {
     setAuthError(null);
     const { username, password } = formData.user;
 
-    console.log(username)
-    console.log(password)
-
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/authentication/login-sso/', {
+      const response = await fetch('http://34.67.119.77/api/v1/authentication/login-sso/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,8 +53,13 @@ export default function Login() {
       const result = await response.json();
       const token = result.access_token || "";  // Extract token from response
 
-      login(result.userData, token);  // Use login method to set user data and token
-      navigate('/');
+      const idToken = Cookies.set('access_token', token);
+
+      console.log(idToken)
+
+      if (idToken !== "") {
+        navigate('/');  
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         setAuthError(error.message);

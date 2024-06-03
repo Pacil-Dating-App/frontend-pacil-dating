@@ -2,12 +2,12 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import gif from '../../assets/dating-story.gif'
 import { useAuth } from '../Authentication/AuthContext';
+import Cookies from 'js-cookie';
 
 const Home: React.FC = () => {
-    const { isAuthenticated } = useAuth();
+    const idToken = Cookies.get('access_token');
     const navigate = useNavigate();
 
-    // Components for authenticated and guest users
     const AuthenticatedContent = () => (
         <div className=''>
             <div className='mb-8'>
@@ -39,7 +39,7 @@ const Home: React.FC = () => {
                 <h1 className="text-4xl font-bold mb-2">Find Your Pacil Match</h1>
                 <p className="text-xl mb-4">Connect with people around you and find your perfect pacilians match.</p>
                 <div>
-                    {isAuthenticated ? <AuthenticatedContent /> : <GuestContent />}
+                    {idToken !== "" ? <AuthenticatedContent /> : <GuestContent />}
                 </div>
             </div>
         </div>
