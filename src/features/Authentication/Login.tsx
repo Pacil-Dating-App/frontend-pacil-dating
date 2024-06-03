@@ -35,14 +35,17 @@ export default function Login() {
     setAuthError(null);
     const { username, password } = formData.user;
 
+    console.log(username)
+    console.log(password)
+
     try {
-      const response = await fetch('http://127.0.0.1:8000/login', {
+      const response = await fetch('http://127.0.0.1:8000/api/v1/authentication/login-sso/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password }),
-        credentials: 'include',  // Include credentials to allow cookies to be sent
+        body: JSON.stringify({ username: username, password: password }),
+        credentials: 'include',
       });
 
       if (!response.ok) {
