@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useGetMe from './getMeUser';
 import Cookies from 'js-cookie';
@@ -25,12 +25,27 @@ const UserProfile: React.FC = () => {
     const navigate = useNavigate();
     const idToken = Cookies.get('access_token');
     const { me } = useGetMe(idToken || '');
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (me != null) {
+          setIsLoading(false);
+        }
+      }, [me]);
 
     const handleEditClick = () => {
         navigate('/edit-profile');
     };
 
     const currentUser = me
+
+    if (isLoading) {
+        return (
+          <div className="flex items-center justify-center h-screen bg-gray-100">
+            <p>Loading...</p>
+          </div>
+        );
+      }
 
     return (
         <div className="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden md:max-w-2xl">
