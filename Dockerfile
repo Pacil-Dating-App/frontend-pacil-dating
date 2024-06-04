@@ -12,7 +12,7 @@ FROM base as dev
 ENV NODE_ENV=development
 COPY . .
 RUN ls -l /app  # Debug step to check if all files are copied
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
 
 # Builder stage
 FROM base as builder
@@ -20,17 +20,10 @@ WORKDIR /app
 COPY . .
 RUN ls -l /app  # Debug step to check if all files are copied
 RUN npm run build
+RUN ls -l /app/build  # Debug step to check if build directory is created
 
 # Production stage
-FROM base as production
-ENV NODE_ENV=production
-RUN npm ci
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-USER nextjs
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/public ./public
-RUN ls -l /app  # Debug step to check if all files are copied
-CMD ["npm", "start"]
+FROM nginx:stable-alpine as production
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
