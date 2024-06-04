@@ -34,12 +34,12 @@ const App: React.FC = () => {
           <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login"element={<Login />} />
-              <Route path="/profile" element={<Profile user={user} />} />
+              <Route path="/profile" element={<Profile/>} />
               <Route path="/matches" element={<Matches />} />
               <Route path="/signup" element={<Registration />} />
               <Route path="/chatroom" element={<ChatRoom />} />
               <Route path="/mahasiswa-detail" element={<MahasiswaDetailPage />} />
-              <Route path="/edit-profile" element={<EditProfile user={user} />} />
+              <Route path="/edit-profile" element={<EditProfile/>} />
           </Routes>
         </div>
         </BrowserRouter>

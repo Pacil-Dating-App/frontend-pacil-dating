@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { User } from './Profile';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import useGetMe from './getMeUser';
 
 interface EditProfileProps {
     user: User;
 }
 
-const EditProfile: React.FC<EditProfileProps> = ({ user }) => {
-    const [formData, setFormData] = useState<User>(user);
+const EditProfile: React.FC = () => {
+    const navigate = useNavigate();
+    const idToken = Cookies.get('access_token');
+    const { me } = useGetMe(idToken || '');
+    const [formData, setFormData] = useState<User>(me!);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
