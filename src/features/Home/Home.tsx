@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import gif from '../../assets/dating-story.gif'
 import { useAuth } from '../Authentication/AuthContext';
+import GuestView from './GuestView';
 
 const Home: React.FC = () => {
     const { isAuthenticated } = useAuth();
@@ -23,12 +24,10 @@ const Home: React.FC = () => {
             </div>
         </div>
     );
-    
-    const GuestContent = () => (
-        <Link to="/login">
-            <button className="bg-neutral-100 text-blue-500 font-bold py-2 px-4 rounded hover:bg-gray-100 mr-2">Login</button>
-        </Link>
-    );
+
+    if (!!!isAuthenticated) {
+        return <GuestView />
+    }
     
     return (
         <div className="h-screen w-screen flex flex-wrap flex-row items-center text-center px-40 pb-40">
@@ -39,7 +38,7 @@ const Home: React.FC = () => {
                 <h1 className="text-4xl font-bold mb-2">Find Your Pacil Match</h1>
                 <p className="text-xl mb-4">Connect with people around you and find your perfect pacilians match.</p>
                 <div>
-                    {isAuthenticated ? <AuthenticatedContent /> : <GuestContent />}
+                    <AuthenticatedContent />
                 </div>
             </div>
         </div>

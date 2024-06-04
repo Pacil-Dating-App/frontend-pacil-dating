@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import Cookies from 'js-cookie';
+import http from "../../utils/http";
+import HttpStatusCode from "../../utils/http/httpStatusCode";
 
 interface FormData {
   user: {
@@ -40,30 +43,20 @@ export default function Registration() {
       name: formData.user.username,
       password: formData.user.password,
     };
-
-    try {
-      const response = await fetch('http://127.0.0.1:8000/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Registration failed');
+    http.register(userData.email, userData.password, userData.name).then((response) => {
+      if (response.status === HttpStatusCode.Ok) {
+        alert("Your registration has been successful. Please proceed to log in.");
+        navigate('/login');
+      } else {
+        setAuthError(response.data);
       }
-
-      const result = await response.json();
-      addUser(result);
-      navigate('/login');
-    } catch (error: unknown) {
+    }).catch((error) => {
       if (error instanceof Error) {
         setAuthError(error.message);
       } else {
         setAuthError('An unknown error occurred');
       }
-    }
+    });
   };
 
   return (

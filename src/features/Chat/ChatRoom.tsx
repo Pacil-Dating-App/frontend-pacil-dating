@@ -1,11 +1,13 @@
 // src/ChatRoom.tsx
 import React from 'react';
+import { useXmpp } from './XmppContext';
 
 interface ChatRoomProps {
   user: { id: number; name: string };
 }
 
 const ChatRoom: React.FC<ChatRoomProps> = ({ user }) => {
+  const { sendMessage } = useXmpp();
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-xs">

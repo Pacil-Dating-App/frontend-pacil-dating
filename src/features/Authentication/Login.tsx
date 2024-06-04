@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import http from "../../utils/http";
+import HttpStatusCode from "../../utils/http/httpStatusCode";
 import { useAuth } from "./AuthContext";
 
 interface FormData {
@@ -11,13 +13,13 @@ interface FormData {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [formData, setFormData] = useState<FormData>({
     user: {
       username: "",
       password: "",
     },
   });
+  const { setIsAuthenticated } = useAuth();
 
   const [authError, setAuthError] = useState<string | null>(null);
 
@@ -37,35 +39,25 @@ export default function Login() {
 
     console.log(username)
     console.log(password)
+    
 
-    try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/authentication/login-sso/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: username, password: password }),
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        throw new Error('Login failed');
+    http.login(username, password).then((response) => {
+      console.log(response.status);
+      console.log(HttpStatusCode.Ok);
+      if (response.status === HttpStatusCode.Ok) {
+        setIsAuthenticated(true);
+        navigate('/');
+      } else {
+        setAuthError(response.data);
       }
-
-      const result = await response.json();
-      const token = result.access_token || "";  // Extract token from response
-
-      login(result.userData, token);  // Use login method to set user data and token
-      navigate('/');
-    } catch (error: unknown) {
+    }).catch((error) => {
       if (error instanceof Error) {
         setAuthError(error.message);
       } else {
         setAuthError('An unknown error occurred');
       }
-    }
+    });
   };
-
   const handleToRegister = () => {
     navigate('/signup');
   };
@@ -84,13 +76,13 @@ export default function Login() {
             </h1>
           </div>
           <form onSubmit={handleSubmit}>
-            <label className="text-left">Username:</label>
+            <label className="text-left">Email:</label>
             <input
               name="username"
               type="text"
               value={formData.user.username}
               onChange={handleChange}
-              placeholder="Username"
+              placeholder="Email"
               className="w-full p-2 text-primary border rounded-md outline-none text-sm transition duration-150 ease-in-out mb-4"
             />
             <label>Password:</label>
