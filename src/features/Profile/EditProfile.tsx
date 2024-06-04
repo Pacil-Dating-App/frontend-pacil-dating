@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User } from './Profile';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -13,6 +13,13 @@ const EditProfile: React.FC = () => {
     const idToken = Cookies.get('access_token');
     const { me } = useGetMe(idToken || '');
     const [formData, setFormData] = useState<User>(me!);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+    if (me != null) {
+        setIsLoading(false);
+    }
+    }, [me]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -21,6 +28,14 @@ const EditProfile: React.FC = () => {
             [name]: value,
         }));
     };
+
+    if (isLoading) {
+    return (
+        <div className="flex items-center justify-center h-screen bg-gray-100">
+        <p>Loading...</p>
+        </div>
+    );
+    }
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
